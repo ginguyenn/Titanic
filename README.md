@@ -1,0 +1,8 @@
+- PassengerId: no
+- [x]  Survived: 0=no, 1=yes: switch button
+- [x]  Pclass: Passenger class: Dropdown-Menü (1st class, 2nd class, 3rd class)
+- [x]  Name: alphabet slider
+- [x]  Sex :Radio-Buttons (Male, Female, non info)
+- [x]  Age: Slider
+- [x]  SibSp: Number of siblings/spouses Aboard: Number input
+- [x]  Parch: Number of parents/children Aboard: Number input
