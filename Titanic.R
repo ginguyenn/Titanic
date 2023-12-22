@@ -12,16 +12,17 @@ library(shiny)
 library('ggplot2') # visualization
 library(shinyWidgets) # buttons
 
+#reading data
+
+
 # Define UI for application that draws a histogram
 ui <- fluidPage(
   
   # Application title
   titlePanel("Titanic Survival Predictation"),
+  plotOutput("survivedPie"),
   
-  #Passenger’s sex: check box group
-  checkboxGroupInput("checkGroup", label = h3("Passenger's Sex"),
-                     choices = list("Female" =1, "Male"=2, "No Informartion"=3),
-                     selected = 1),
+
   
   # Passenger class: Dropdown-Menü (1st class, 2nd class, 3rd class)
   selectInput("select", label = h3("Passenger's class"),
@@ -34,6 +35,11 @@ ui <- fluidPage(
     onLabel = "Survived",
     offLabel = "Died"
   ),
+  
+  #Passenger’s sex: check box group
+  checkboxGroupInput("checkGroup", label = h3("Passenger's Sex"),
+                     choices = list("Female" =1, "Male"=2, "No Informartion"=3),
+                     selected = 1),
   
   #passenger's name
   sliderTextInput(
@@ -76,16 +82,40 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
   
+  # Reactive value để theo dõi trạng thái của nút switch
+  switch_status <- reactiveVal("Survived")
   
-  output$distPlot <- renderPlot({
-    # generate bins based on input$bins from ui.R
-    x    <- faithful[, 2]
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+  # Tính toán số liệu cho biểu đồ vòng "survived" hoặc "died"
+  observe({
+    if (input$Id014 == TRUE) {
+      switch_status("Survived")
+    } else {
+      switch_status("Died")
+    }
+  })
+  
+  # Tính toán số liệu cho biểu đồ vòng "survived" hoặc "died"
+  survived_counts <- table(titanic_data$Survived)
+  
+  # Tạo biểu đồ vòng "survived" hoặc "died"
+  output$survivedPie <- renderPlot({
+    labels <- c("Died", "Survived")
+    colors <- c("red", "blue")
+  
+    # Chọn dữ liệu dựa trên trạng thái của nút switch
+    if (switch_status() == "Survived") {
+      survived_counts <- table(titanic_data$Survived)
+    } else {
+      survived_counts <- table(1 - titanic_data$Survived)
+    }
     
-    # draw the age histogram
-    hist(x, breaks = bins, col = 'blue', border = 'white',
-         xlab = 'Waiting time to next eruption (in mins)',
-         main = 'Something title')
+    # Tạo biểu đồ vòng
+    pie(survived_counts, labels = labels, col = colors, main = "Survival Distribution")
+  })
+  
+  # Tạo biểu đồ phân phối (đối với distPlot)
+  output$distPlot <- renderPlot({
+
   })
 }
 
