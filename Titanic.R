@@ -11,8 +11,12 @@
 library(shiny)
 library('ggplot2') # visualization
 library(shinyWidgets) # buttons
+library(tidyverse)
 
-#reading data
+
+#import data
+titanic_data <- read_csv("C:/Users/gingu/OneDrive/Máy tính/Gin/HTW/titanic_data.csv")
+View(titanic_data)
 
 
 # Define UI for application that draws a histogram
@@ -23,7 +27,7 @@ ui <- fluidPage(
   plotOutput("survivedPie"),
   
 
-  
+  #CATEGORICAL
   # Passenger class: Dropdown-Menü (1st class, 2nd class, 3rd class)
   selectInput("select", label = h3("Passenger's class"),
               choices = list("Class 1"=1, "Class 2"=2, "Class 3" =3)),
@@ -40,35 +44,43 @@ ui <- fluidPage(
   checkboxGroupInput("checkGroup", label = h3("Passenger's Sex"),
                      choices = list("Female" =1, "Male"=2, "No Informartion"=3),
                      selected = 1),
-  
-  #passenger's name
-  sliderTextInput(
-    inputId = "Id101",
-    label = "Passenger's name start with: ", 
-    choices = LETTERS,
-    selected = c("A", "T"),
-    from_min = "A", 
-    to_max = "Z"
-  ),
-  
-  
-
-  
   #Number of siblings/spouses aboard
   numericInput("num", label = h3("Number of siblings/spouses aboard"), value = 0),
   
   #Number of parents/children aboard
   numericInput("Number of parents/children", label = h3("Number of parents/children aboard"),value=0),
   
+  #Port of Embarkation
+  awesomeCheckboxGroup(
+    inputId = "Id001",
+    label = h3 ("Ports: "),
+    choices = c("S"=1, "C"=2, "Q"=3),
+    inline = TRUE
+  )
+    
+    
+  ,
+  
+  
+  #MIX
+  #passenger's name
+  sliderTextInput(
+    inputId = "Id101",
+    label = h3("Passenger's name start with: "), 
+    choices = LETTERS,
+    selected = c("A", "T"),
+    from_min = "A", 
+    to_max = "Z"
+  ),
+  
+  #NUMERIC
+  #fare
+  
+  
+
+  
   # Sidebar with a slider input for Passenger’s age
-  sidebarLayout(
-    sidebarPanel(
-      sliderInput("bins",
-                  "Number of ages:",
-                  min = 0,
-                  max = 100,
-                  value = 30)
-    ),
+
   
 
     
@@ -77,7 +89,7 @@ ui <- fluidPage(
       plotOutput("distPlot")
     )
   )
-)
+
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
