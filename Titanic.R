@@ -18,12 +18,15 @@ library(tidyverse)
 titanic_data <- read_csv("C:/Users/gingu/OneDrive/Máy tính/Gin/HTW/titanic_data.csv")
 View(titanic_data)
 
+#cleaning data
+
+
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
   
   # Application title
-  titlePanel("Titanic Survival Predictation"),
+  titlePanel("Titanic Survival Predictation Group 18"),
   plotOutput("survivedPie"),
   
 
@@ -62,7 +65,7 @@ ui <- fluidPage(
   ,
   
   
-  #MIX
+  #TYPO
   #passenger's name
   sliderTextInput(
     inputId = "Id101",
@@ -73,13 +76,24 @@ ui <- fluidPage(
     to_max = "Z"
   ),
   
-  #NUMERIC
-  #fare
+  #MIX
+  #cabin
+  textInput("text_cabin", label = h3("Cabin: "), value = ""),
   
+  #Ticket
+  textInput("text_ticket", label = h3("Ticket: "), value = ""),
   
 
+  #NUMERIC
+  #fare
+  sliderInput("slider_fare", label = h3("Fare Range"), min = 0, 
+              max = 10, value = c(0, 6)),
+
   
-  # Sidebar with a slider input for Passenger’s age
+  #Passenger’s age
+  sliderInput("slider_age", label = h3("Age Range"), min = 0, 
+              max = 100, value = c(20, 60)),
+
 
   
 
@@ -88,8 +102,8 @@ ui <- fluidPage(
     mainPanel(
       plotOutput("distPlot")
     )
-  )
-
+  
+)
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
